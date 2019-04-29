@@ -53,6 +53,7 @@ class Proxy extends baseProxy {
     this.handle(proxyServer);
     proxies.forEach(proxy => {
       const pattern = new RegExp('^/' + proxy.context + '(/|/w+)?');
+      // how to proxy ws?
       mildArr.push(
         this.nginx('/' + proxy.context, {
           target: proxy.host,

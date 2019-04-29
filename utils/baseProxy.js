@@ -56,6 +56,19 @@ class baseProxy {
         handleError.call(null, { err, req, res });
       }
     });
+    // try the proxy websocket here
+    /**
+    First we need to point to the server
+    var socketProxy = new httpProxy.createProxyServer({
+      target: {
+        host: 'url',
+        port: 'port number'
+      }
+    })
+    **/
+    proxyServer.on('upgrade', (req, socket, head) => {
+      socketProxy.ws(req, socket, head);
+    });
   }
 }
 
