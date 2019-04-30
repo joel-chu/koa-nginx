@@ -9,11 +9,11 @@ const baseProxy = require('./utils/baseProxy');
 class Proxy extends baseProxy {
   nginx(context, options) {
     return (ctx, next) => {
+      // so when we proxy the socket it must be under a namespace
       if (!ctx.url.startsWith(context)) {
         return next();
       }
       const { logs, rewrite, target } = options;
-
       ctx.req.body = ctx.request.body || null;
       options.headers = ctx.request.headers;
       return new Promise(resolve => {
@@ -43,6 +43,7 @@ class Proxy extends baseProxy {
           }
           resolve();
         });
+
       });
     };
   }
@@ -59,6 +60,7 @@ class Proxy extends baseProxy {
           target: proxy.host,
           changeOrigin: true,
           xfwd: true,
+          ws: proxy.ws || false,
           rewrite: proxy.rewrite || rewrite(pattern),
           logs: proxy.log || true,
           proxyTimeout: proxy.proxyTimeout || proxyTimeout,
